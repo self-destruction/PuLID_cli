@@ -143,4 +143,4 @@ ims = run(
 )
 
 for i, img in enumerate(ims):
-    Image.fromarray(x_sample).save(f'{args.save_dir}/{args.save_file_name}_{i}.png')
+    Image.fromarray(img).save(f'{args.save_dir}/{args.save_file_name}_{i}.png')
