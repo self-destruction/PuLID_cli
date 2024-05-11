@@ -85,8 +85,8 @@ def run(
     mode,
     id_mix
 ):
-    id_image = Image.open(face_image).convert("RGB")
-    supp_images = [Image.open(name).convert("RGB") for name in [supp_image1, supp_image2, supp_image3] if name != '']
+    id_image = np.array(Image.open(face_image).convert("RGB"))
+    supp_images = [np.array(Image.open(name).convert("RGB")) for name in [supp_image1, supp_image2, supp_image3] if name != '']
 
     pipeline.debug_img_list = []
     if mode == 'fidelity':
