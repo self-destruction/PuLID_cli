@@ -87,10 +87,10 @@ class PuLIDPipeline:
         # antelopev2
         snapshot_download('DIAMONIK7777/antelopev2', local_dir='models/antelopev2')
         self.app = FaceAnalysis(
-            name='antelopev2', root='.', providers=['CPUExecutionProvider']
+            name='antelopev2', root='.', providers=['CUDAExecutionProvider', 'CPUExecutionProvider']
         )
         self.app.prepare(ctx_id=0, det_size=(640, 640))
-        self.handler_ante = insightface.model_zoo.get_model('models/antelopev2/glintr100.onnx', providers=['CPUExecutionProvider'])
+        self.handler_ante = insightface.model_zoo.get_model('models/antelopev2/glintr100.onnx')
         self.handler_ante.prepare(ctx_id=0)
 
         print('load done')
@@ -99,9 +99,6 @@ class PuLIDPipeline:
         torch.cuda.empty_cache()
 
         self.load_pretrain()
-
-        # other configs
-        self.debug_img_list = []
 
     def hack_unet_attn_layers(self, unet):
         id_adapter_attn_procs = {}
@@ -159,12 +156,6 @@ class PuLIDPipeline:
                 -1
             ]  # only use the maximum face
             id_ante_embedding = face_info['embedding']
-            self.debug_img_list.append(
-                image[
-                    int(face_info['bbox'][1]) : int(face_info['bbox'][3]),
-                    int(face_info['bbox'][0]) : int(face_info['bbox'][2]),
-                ]
-            )
         else:
             id_ante_embedding = None
 
@@ -194,7 +185,6 @@ class PuLIDPipeline:
         white_image = torch.ones_like(input)
         # only keep the face features
         face_features_image = torch.where(bg, white_image, self.to_gray(input))
-        self.debug_img_list.append(tensor2img(face_features_image, rgb2bgr=False))
 
         # transform img before sending to eva-clip-vit
         face_features_image = resize(face_features_image, self.clip_vision_model.image_size, InterpolationMode.BICUBIC)
