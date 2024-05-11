@@ -42,16 +42,18 @@ class PuLIDPipeline:
         sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
-        # # load base model
-        # unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
-        # unet.load_state_dict(
-        #     load_file(
-        #         # hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
-        #         hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
-        #     )
-        # )
-        # unet.half()
-        # self.hack_unet_attn_layers(unet)
+        print(0)
+        # load base model
+        unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
+        unet.load_state_dict(
+            load_file(
+                # hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
+                # hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
+                hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
+            )
+        )
+        unet.half()
+        self.hack_unet_attn_layers(unet)
         print(1)
         # self.pipe = StableDiffusionXLPipeline.from_pretrained(
         #     sdxl_base_repo, torch_dtype=torch.float16
