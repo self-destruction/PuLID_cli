@@ -40,20 +40,20 @@ class PuLIDPipeline:
         sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
         self.sdxl_base_repo = sdxl_base_repo
 
-        # load base model
-        unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
-        unet.load_state_dict(
-            load_file(
-                # hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
-                hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
-            )
-        )
-        unet.half()
-        self.hack_unet_attn_layers(unet)
+        # # load base model
+        # unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
+        # unet.load_state_dict(
+        #     load_file(
+        #         # hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
+        #         hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
+        #     )
+        # )
+        # unet.half()
+        # self.hack_unet_attn_layers(unet)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
-            sdxl_base_repo, unet=unet, torch_dtype=torch.float16, variant="fp16"
+            sdxl_base_repo, torch_dtype=torch.float16, variant="fp16"
         ).to(self.device)
-        self.pipe.watermark = None
+        # self.pipe.watermark = None
 
         # scheduler
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(
@@ -62,6 +62,8 @@ class PuLIDPipeline:
 
         # ID adapters
         self.id_adapter = IDEncoder().to(self.device)
+
+        self.hack_unet_attn_layers(self.pipe.unet)
 
         # preprocessors
         # face align and parsing
