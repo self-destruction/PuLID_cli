@@ -38,7 +38,8 @@ class PuLIDPipeline:
         self.device = 'cuda'
         # sdxl_base_repo = 'stabilityai/stable-diffusion-xl-base-1.0'
         sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
-        sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
+        # sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
+        sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
         # sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
