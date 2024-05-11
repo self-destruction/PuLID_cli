@@ -114,7 +114,7 @@ def run(
         id_embeddings = None
 
     if seed == -1:
-        seed = random.randint(0, 2147483647)
+        seed = random.randint(0, np.iinfo(np.int32).max)
     seed_everything(seed)
     ims = []
     for _ in range(n_samples):
