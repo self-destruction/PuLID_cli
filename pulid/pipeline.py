@@ -45,7 +45,7 @@ class PuLIDPipeline:
                 hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
             )
         )
-        unet.half()
+        # unet.half()
         self.hack_unet_attn_layers(unet)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo, unet=unet, torch_dtype=torch.float16, variant="fp16"
