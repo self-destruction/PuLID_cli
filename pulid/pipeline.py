@@ -34,18 +34,21 @@ class PuLIDPipeline:
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.device = 'cuda'
-        sdxl_base_repo = 'stabilityai/stable-diffusion-xl-base-1.0'
-        sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
+        # sdxl_base_repo = 'stabilityai/stable-diffusion-xl-base-1.0'
+        sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
+        # sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
+        sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
         self.sdxl_base_repo = sdxl_base_repo
 
         # load base model
         unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
         unet.load_state_dict(
             load_file(
-                hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
+                # hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
+                hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
             )
         )
-        # unet.half()
+        unet.half()
         self.hack_unet_attn_layers(unet)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo, unet=unet, torch_dtype=torch.float16, variant="fp16"
