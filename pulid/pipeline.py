@@ -4,6 +4,7 @@ import cv2
 import insightface
 import torch
 import torch.nn as nn
+from torch.nn import init
 from basicsr.utils import img2tensor, tensor2img
 from diffusers import (
     DPMSolverMultistepScheduler,
