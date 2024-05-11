@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import argparse
 from PIL import Image
+import random
 
 from pulid import attention_processor as attention
 from pulid.pipeline import PuLIDPipeline
@@ -112,6 +113,8 @@ def run(
     else:
         id_embeddings = None
 
+    if seed == -1:
+        seed = random.randint(0, 2147483647)
     seed_everything(seed)
     ims = []
     for _ in range(n_samples):
