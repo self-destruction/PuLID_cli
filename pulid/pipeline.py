@@ -51,21 +51,26 @@ class PuLIDPipeline:
         # )
         # unet.half()
         # self.hack_unet_attn_layers(unet)
+        print(1)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo, torch_dtype=torch.float16
         ).to(self.device)
         # self.pipe.watermark = None
 
+        print(2)
         # scheduler
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(
             self.pipe.scheduler.config, timestep_spacing="trailing"
         )
 
+        print(3)
         # ID adapters
         self.id_adapter = IDEncoder().to(self.device)
 
+        print(4)
         self.hack_unet_attn_layers(self.pipe.unet)
 
+        print(5)
         # preprocessors
         # face align and parsing
         self.face_helper = FaceRestoreHelper(
@@ -77,10 +82,12 @@ class PuLIDPipeline:
             device=self.device,
         )
         self.face_helper.face_parse = None
+        print(6)
         self.face_helper.face_parse = init_parsing_model(model_name='bisenet', device=self.device)
         # clip-vit backbone
         model, _, _ = create_model_and_transforms('EVA02-CLIP-L-14-336', 'eva_clip', force_custom_clip=True)
         model = model.visual
+        print(7)
         self.clip_vision_model = model.to(self.device)
         eva_transform_mean = getattr(self.clip_vision_model, 'image_mean', OPENAI_DATASET_MEAN)
         eva_transform_std = getattr(self.clip_vision_model, 'image_std', OPENAI_DATASET_STD)
@@ -92,6 +99,7 @@ class PuLIDPipeline:
         self.eva_transform_std = eva_transform_std
         # antelopev2
         snapshot_download('DIAMONIK7777/antelopev2', local_dir='models/antelopev2')
+        print(8)
         self.app = FaceAnalysis(
             name='antelopev2', root='.', providers=['CPUExecutionProvider']
         )
