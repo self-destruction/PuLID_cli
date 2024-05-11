@@ -51,7 +51,7 @@ class PuLIDPipeline:
         # unet.half()
         # self.hack_unet_attn_layers(unet)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
-            sdxl_base_repo, torch_dtype=torch.float16, variant="fp16"
+            sdxl_base_repo, torch_dtype=torch.float16
         ).to(self.device)
         # self.pipe.watermark = None
 
