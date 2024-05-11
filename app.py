@@ -53,7 +53,7 @@ parser.add_argument("--cfg_scale", type=float, default=1.2)
 # Num samples [1, 8]
 parser.add_argument("--n_samples", type=int, default=1)
 parser.add_argument("--seed", type=int, default=-1)
-parser.add_argument("--steps", type=int, default=20)
+parser.add_argument("--steps", type=int, default=4)
 # Height
 parser.add_argument("--h", type=int, default=1024)
 # Width
