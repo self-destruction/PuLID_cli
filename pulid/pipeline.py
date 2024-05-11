@@ -52,10 +52,21 @@ class PuLIDPipeline:
         # unet.half()
         # self.hack_unet_attn_layers(unet)
         print(1)
-        self.pipe = StableDiffusionXLPipeline.from_pretrained(
-            sdxl_base_repo, torch_dtype=torch.float16
-        ).to(self.device)
+        # self.pipe = StableDiffusionXLPipeline.from_pretrained(
+        #     sdxl_base_repo, torch_dtype=torch.float16
+        # ).to(self.device)
         # self.pipe.watermark = None
+        vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
+        self.pipe = StableDiffusionXLPipeline.from_pretrained(
+            sdxl_base_repo,
+            vae=vae,
+            torch_dtype=torch.float16,
+            custom_pipeline="lpw_stable_diffusion_xl",
+            use_safetensors=True,
+            add_watermarker=False,
+            variant="fp16",
+        )
+        self.pipe.to(self.device)
 
         print(2)
         # scheduler
