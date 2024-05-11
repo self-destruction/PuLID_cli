@@ -42,7 +42,7 @@ class PuLIDPipeline:
         unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
         unet.load_state_dict(
             load_file(
-                hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_4step_unet.safetensors'), device=self.device
+                hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
             )
         )
         unet.half()
@@ -87,7 +87,7 @@ class PuLIDPipeline:
         # antelopev2
         snapshot_download('DIAMONIK7777/antelopev2', local_dir='models/antelopev2')
         self.app = FaceAnalysis(
-            name='antelopev2', root='.', providers=['CUDAExecutionProvider', 'CPUExecutionProvider']
+            name='antelopev2', root='.', providers=['CPUExecutionProvider']
         )
         self.app.prepare(ctx_id=0, det_size=(640, 640))
         self.handler_ante = insightface.model_zoo.get_model('models/antelopev2/glintr100.onnx', providers=['CPUExecutionProvider'])
