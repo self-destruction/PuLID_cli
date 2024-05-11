@@ -38,8 +38,8 @@ class PuLIDPipeline:
         self.device = 'cuda'
         # sdxl_base_repo = 'stabilityai/stable-diffusion-xl-base-1.0'
         sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
-        # sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
-        sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-v9'
+        sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
+        # sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
         print(0)
@@ -48,8 +48,8 @@ class PuLIDPipeline:
         unet.load_state_dict(
             load_file(
                 # hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
-                # hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
-                hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
+                hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
+                # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
             )
         )
         unet.half()
