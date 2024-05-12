@@ -83,12 +83,10 @@ class PuLIDPipeline:
         # antelopev2
         snapshot_download('DIAMONIK7777/antelopev2', local_dir='models/antelopev2')
         self.app = FaceAnalysis(
-            # name='antelopev2', root='.', providers=['CPUExecutionProvider']
-            name='antelopev2', root='.', providers=['CUDAExecutionProvider']
+            name='antelopev2', root='.', providers=['CPUExecutionProvider']
         )
         self.app.prepare(ctx_id=0, det_size=(640, 640))
-        # self.handler_ante = insightface.model_zoo.get_model('models/antelopev2/glintr100.onnx', providers=['CPUExecutionProvider'])
-        self.handler_ante = insightface.model_zoo.get_model('models/antelopev2/glintr100.onnx', providers=['CUDAExecutionProvider'])
+        self.handler_ante = insightface.model_zoo.get_model('models/antelopev2/glintr100.onnx', providers=['CPUExecutionProvider'])
         self.handler_ante.prepare(ctx_id=0)
 
         print('load done')
