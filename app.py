@@ -42,7 +42,7 @@ parser.add_argument("--prompt", type=str, default='portrait, cinematic, wolf ear
 # Negative Prompt
 parser.add_argument("--neg_prompt", type=str, default='')
 # CFG, recommend value range [3, 7]
-parser.add_argument("--cfg_scale", type=float, default=7)
+parser.add_argument("--cfg_scale", type=float, default=7.0)
 # Num samples [1, 8]
 parser.add_argument("--n_samples", type=int, default=1)
 parser.add_argument("--seed", type=int, default=-1)
