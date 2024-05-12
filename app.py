@@ -48,16 +48,16 @@ parser.add_argument("--supp_face_img_3", type=str, default='')
 parser.add_argument("--prompt", type=str, default='portrait, cinematic, wolf ears, white hair')
 # Negative Prompt
 parser.add_argument("--neg_prompt", type=str, default=DEFAULT_NEGATIVE_PROMPT)
-# CFG, recommend value range [1, 1.5], 1 will be faster
-parser.add_argument("--cfg_scale", type=float, default=1.2)
+# CFG, recommend value range [3, 7]
+parser.add_argument("--cfg_scale", type=float, default=7)
 # Num samples [1, 8]
 parser.add_argument("--n_samples", type=int, default=1)
 parser.add_argument("--seed", type=int, default=-1)
-parser.add_argument("--steps", type=int, default=4)
+parser.add_argument("--steps", type=int, default=40)
 # Height
-parser.add_argument("--h", type=int, default=1024)
+parser.add_argument("--h", type=int, default=1216)
 # Width
-parser.add_argument("--w", type=int, default=768)
+parser.add_argument("--w", type=int, default=832)
 # ID scale [0.00, 5.00]
 parser.add_argument("--id_scale", type=float, default=0.80)
 # ['fidelity', 'extremely style']
