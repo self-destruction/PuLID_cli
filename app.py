@@ -13,13 +13,6 @@ torch.set_grad_enabled(False)
 
 pipeline = PuLIDPipeline()
 
-DEFAULT_NEGATIVE_PROMPT = (
-    'flaws in the eyes, flaws in the face, flaws, lowres, non-HDRi, low quality, worst quality,'
-    'artifacts noise, text, watermark, glitch, deformed, mutated, ugly, disfigured, hands, '
-    'low resolution, partially rendered objects, deformed or partially rendered eyes, '
-    'deformed, deformed eyeballs, cross-eyed, blurry'
-)
-
 # # realistic
 # --prompt 'portrait, cinematic, wolf ears, white hair' --mode 'fidelity'
 # # painting style
@@ -47,7 +40,7 @@ parser.add_argument("--supp_face_img_3", type=str, default='')
 # Prompt
 parser.add_argument("--prompt", type=str, default='portrait, cinematic, wolf ears, white hair')
 # Negative Prompt
-parser.add_argument("--neg_prompt", type=str, default=DEFAULT_NEGATIVE_PROMPT)
+parser.add_argument("--neg_prompt", type=str, default='')
 # CFG, recommend value range [3, 7]
 parser.add_argument("--cfg_scale", type=float, default=7)
 # Num samples [1, 8]
