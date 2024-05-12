@@ -77,7 +77,7 @@ class PuLIDPipeline:
         print(2)
         # scheduler
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(
-            self.pipe.scheduler.config, timestep_spacing="trailing"
+            self.pipe.scheduler.config, timestep_spacing="trailing", use_karras_sigmas=True
         )
 
         print(3)
