@@ -213,7 +213,7 @@ class PuLIDPipeline:
         images = self.pipe(
             prompt=prompt,
             negative_prompt=prompt_n,
-            num_images_per_prompt=size[0],
+            # num_images_per_prompt=size[0],
             height=size[1],
             width=size[2],
             eta=1.0,
