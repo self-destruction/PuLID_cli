@@ -40,7 +40,7 @@ class PuLIDPipeline:
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
             torch_dtype=torch.float16,
-            # custom_pipeline="lpw_stable_diffusion_xl",
+            custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
             add_watermarker=False,
             variant="fp16",
