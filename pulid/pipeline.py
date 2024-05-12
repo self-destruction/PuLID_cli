@@ -36,35 +36,12 @@ class PuLIDPipeline:
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.device = 'cuda'
-        # sdxl_base_repo = 'stabilityai/stable-diffusion-xl-base-1.0'
         sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
-        # sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
-        # sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
-        # sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
-        # sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
-        # print(0)
-        # # load base model
-        # unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
-        # unet.load_state_dict(
-        #     load_file(
-        #         # hf_hub_download('ByteDance/SDXL-Lightning', 'sdxl_lightning_8step_unet.safetensors'), device=self.device
-        #         hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
-        #         # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
-        #     )
-        # )
-        # unet.half()
-        # self.hack_unet_attn_layers(unet)
-        print(1)
-        # self.pipe = StableDiffusionXLPipeline.from_pretrained(
-        #     sdxl_base_repo, torch_dtype=torch.float16
-        # ).to(self.device)
-        # self.pipe.watermark = None
         # vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
-            # unet=unet,
             # vae=vae,
             torch_dtype=torch.float16,
             # custom_pipeline="lpw_stable_diffusion_xl",
@@ -72,22 +49,17 @@ class PuLIDPipeline:
             add_watermarker=False,
             variant="fp16",
         ).to(self.device)
-        # self.pipe.watermark = None
 
-        print(2)
         # scheduler
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(
             self.pipe.scheduler.config, timestep_spacing="trailing", use_karras_sigmas=True
         )
 
-        print(3)
         # ID adapters
         self.id_adapter = IDEncoder().to(self.device)
 
-        print(4)
         self.hack_unet_attn_layers(self.pipe.unet)
 
-        print(5)
         # preprocessors
         # face align and parsing
         self.face_helper = FaceRestoreHelper(
@@ -99,12 +71,10 @@ class PuLIDPipeline:
             device=self.device,
         )
         self.face_helper.face_parse = None
-        print(6)
         self.face_helper.face_parse = init_parsing_model(model_name='bisenet', device=self.device)
         # clip-vit backbone
         model, _, _ = create_model_and_transforms('EVA02-CLIP-L-14-336', 'eva_clip', force_custom_clip=True)
         model = model.visual
-        print(7)
         self.clip_vision_model = model.to(self.device)
         eva_transform_mean = getattr(self.clip_vision_model, 'image_mean', OPENAI_DATASET_MEAN)
         eva_transform_std = getattr(self.clip_vision_model, 'image_std', OPENAI_DATASET_STD)
