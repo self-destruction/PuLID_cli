@@ -17,7 +17,7 @@ from insightface.app import FaceAnalysis
 from safetensors.torch import load_file
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.functional import normalize, resize
-from hidiffusion import apply_hidiffusion, remove_hidiffusion
+# from hidiffusion import apply_hidiffusion, remove_hidiffusion
 
 from eva_clip import create_model_and_transforms
 from eva_clip.constants import OPENAI_DATASET_MEAN, OPENAI_DATASET_STD
@@ -41,7 +41,6 @@ class PuLIDPipeline:
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
             torch_dtype=torch.float16,
-            # custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
             add_watermarker=False,
             variant="fp16",
@@ -57,10 +56,9 @@ class PuLIDPipeline:
 
         self.hack_unet_attn_layers(self.pipe.unet)
 
-        apply_hidiffusion(self.pipe)
-        self.pipe.enable_vae_tiling()
-        self.pipe.enable_model_cpu_offload()
-        # self.pipe.enable_xformers_memory_efficient_attention()
+        # apply_hidiffusion(self.pipe)
+        # self.pipe.enable_vae_tiling()
+        # self.pipe.enable_model_cpu_offload()
 
         # preprocessors
         # face align and parsing
@@ -213,10 +211,10 @@ class PuLIDPipeline:
         images = self.pipe(
             prompt=prompt,
             negative_prompt=prompt_n,
-            # num_images_per_prompt=size[0],
+            num_images_per_prompt=size[0],
             height=size[1],
             width=size[2],
-            eta=1.0,
+            # eta=1.0,
             num_inference_steps=steps,
             guidance_scale=guidance_scale,
             cross_attention_kwargs={'id_embedding': image_embedding, 'id_scale': id_scale},
