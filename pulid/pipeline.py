@@ -37,24 +37,25 @@ class PuLIDPipeline:
         super().__init__()
         self.device = 'cuda'
         # sdxl_base_repo = 'stabilityai/stable-diffusion-xl-base-1.0'
-        sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
-        sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
-        # sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
+        # sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
+        sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
+        # sdxl_lightning_repo = 'ByteDance/SDXL-Lightning'
+        sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-Lightning'
         # sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
-        # print(0)
-        # # load base model
-        # unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
-        # unet.load_state_dict(
-        #     load_file(
-        #         hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
-        #         # hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
-        #         # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
-        #     )
-        # )
-        # unet.half()
-        # self.hack_unet_attn_layers(unet)
+        print(0)
+        # load base model
+        unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
+        unet.load_state_dict(
+            load_file(
+                # hf_hub_download(sdxl_lightning_repo, 'sdxl_lightning_8step_unet.safetensors'), device=self.device
+                hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
+                # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
+            )
+        )
+        unet.half()
+        self.hack_unet_attn_layers(unet)
         print(1)
         # self.pipe = StableDiffusionXLPipeline.from_pretrained(
         #     sdxl_base_repo, torch_dtype=torch.float16
@@ -63,14 +64,15 @@ class PuLIDPipeline:
         # vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
+            unet=unet,
             # vae=vae,
             torch_dtype=torch.float16,
             # custom_pipeline="lpw_stable_diffusion_xl",
-            use_safetensors=True,
-            add_watermarker=False,
+            # use_safetensors=True,
+            # add_watermarker=False,
             variant="fp16",
-        )
-        self.pipe.to(self.device)
+        ).to(self.device)
+        self.pipe.watermark = None
 
         print(2)
         # scheduler
