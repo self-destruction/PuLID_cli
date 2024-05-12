@@ -83,7 +83,7 @@ class PuLIDPipeline:
         self.id_adapter = IDEncoder().to(self.device)
 
         print(4)
-        self.pipe.unet = self.hack_unet_attn_layers(self.pipe.unet)
+        self.hack_unet_attn_layers(self.pipe.unet)
 
         print(5)
         # preprocessors
