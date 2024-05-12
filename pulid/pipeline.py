@@ -68,7 +68,7 @@ class PuLIDPipeline:
             # vae=vae,
             torch_dtype=torch.float16,
             # custom_pipeline="lpw_stable_diffusion_xl",
-            # use_safetensors=True,
+            use_safetensors=True,
             # add_watermarker=False,
             # variant="fp16",
         ).to(self.device)
