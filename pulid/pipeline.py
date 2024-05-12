@@ -44,18 +44,18 @@ class PuLIDPipeline:
         # sdxl_lightning_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
-        print(0)
-        # load base model
-        unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
-        unet.load_state_dict(
-            load_file(
-                # hf_hub_download('ByteDance/SDXL-Lightning', 'sdxl_lightning_8step_unet.safetensors'), device=self.device
-                hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
-                # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
-            )
-        )
-        unet.half()
-        self.hack_unet_attn_layers(unet)
+        # print(0)
+        # # load base model
+        # unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
+        # unet.load_state_dict(
+        #     load_file(
+        #         # hf_hub_download('ByteDance/SDXL-Lightning', 'sdxl_lightning_8step_unet.safetensors'), device=self.device
+        #         hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
+        #         # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
+        #     )
+        # )
+        # unet.half()
+        # self.hack_unet_attn_layers(unet)
         print(1)
         # self.pipe = StableDiffusionXLPipeline.from_pretrained(
         #     sdxl_base_repo, torch_dtype=torch.float16
@@ -64,7 +64,7 @@ class PuLIDPipeline:
         # vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
-            unet=unet,
+            # unet=unet,
             # vae=vae,
             torch_dtype=torch.float16,
             # custom_pipeline="lpw_stable_diffusion_xl",
@@ -153,61 +153,61 @@ class PuLIDPipeline:
         unet.set_attn_processor(id_adapter_attn_procs)
         self.id_adapter_attn_layers = nn.ModuleList(unet.attn_processors.values())
 
-    # def load_pretrain(self):
-    #     hf_hub_download('guozinan/PuLID', 'pulid_v1.bin', local_dir='models')
-    #     ckpt_path = 'models/pulid_v1.bin'
-    #     state_dict = torch.load(ckpt_path, map_location='cpu')
-    #     state_dict_dict = {}
-    #     for k, v in state_dict.items():
-    #         module = k.split('.')[0]
-    #         state_dict_dict.setdefault(module, {})
-    #         new_k = k[len(module) + 1 :]
-    #         state_dict_dict[module][new_k] = v
-
-    #     for module in state_dict_dict:
-    #         print(f'loading from {module}')
-    #         getattr(self, module).load_state_dict(state_dict_dict[module], strict=True)
-
     def load_pretrain(self):
         hf_hub_download('guozinan/PuLID', 'pulid_v1.bin', local_dir='models')
         ckpt_path = 'models/pulid_v1.bin'
-        checkpoint = torch.load(ckpt_path, map_location='cpu')
-        model_sd = self.id_adapter.state_dict()
-        checkpoint_keys = set(checkpoint.keys())
-        model_keys = set(model_sd.keys())
+        state_dict = torch.load(ckpt_path, map_location='cpu')
+        state_dict_dict = {}
+        for k, v in state_dict.items():
+            module = k.split('.')[0]
+            state_dict_dict.setdefault(module, {})
+            new_k = k[len(module) + 1 :]
+            state_dict_dict[module][new_k] = v
 
-        # Remove keys not in the current model
-        for key in list(checkpoint_keys - model_keys):
-            del checkpoint[key]
+        for module in state_dict_dict:
+            print(f'loading from {module}')
+            getattr(self, module).load_state_dict(state_dict_dict[module], strict=True)
+
+    # def load_pretrain(self):
+    #     hf_hub_download('guozinan/PuLID', 'pulid_v1.bin', local_dir='models')
+    #     ckpt_path = 'models/pulid_v1.bin'
+    #     checkpoint = torch.load(ckpt_path, map_location='cpu')
+    #     model_sd = self.id_adapter.state_dict()
+    #     checkpoint_keys = set(checkpoint.keys())
+    #     model_keys = set(model_sd.keys())
+
+    #     # Remove keys not in the current model
+    #     for key in list(checkpoint_keys - model_keys):
+    #         del checkpoint[key]
         
-        # Initialize missing keys based on their nature
-        for key in list(model_keys - checkpoint_keys):
-            if 'weight' in key:
-                # Assuming the parameter is a weight matrix
-                if 'conv' in key or 'linear' in key:
-                    # Only apply Kaiming or Xavier initialization to parameters with at least 2 dimensions
-                    if model_sd[key].ndim >= 2:
-                        init.kaiming_normal_(model_sd[key], mode='fan_out', nonlinearity='relu')
-                    else:
-                        # Fall back to a simpler initialization for 1D parameters
-                        init.normal_(model_sd[key])
-                else:
-                    # Use Xavier initialization for other weights, typically used in layers like LSTM
-                    if model_sd[key].ndim >= 2:
-                        init.xavier_normal_(model_sd[key])
-                    else:
-                        # Fall back to a simpler initialization for 1D parameters
-                        init.normal_(model_sd[key])
-            elif 'bias' in key:
-                init.zeros_(model_sd[key])
+    #     # Initialize missing keys based on their nature
+    #     for key in list(model_keys - checkpoint_keys):
+    #         if 'weight' in key:
+    #             # Assuming the parameter is a weight matrix
+    #             if 'conv' in key or 'linear' in key:
+    #                 # Only apply Kaiming or Xavier initialization to parameters with at least 2 dimensions
+    #                 if model_sd[key].ndim >= 2:
+    #                     init.kaiming_normal_(model_sd[key], mode='fan_out', nonlinearity='relu')
+    #                 else:
+    #                     # Fall back to a simpler initialization for 1D parameters
+    #                     init.normal_(model_sd[key])
+    #             else:
+    #                 # Use Xavier initialization for other weights, typically used in layers like LSTM
+    #                 if model_sd[key].ndim >= 2:
+    #                     init.xavier_normal_(model_sd[key])
+    #                 else:
+    #                     # Fall back to a simpler initialization for 1D parameters
+    #                     init.normal_(model_sd[key])
+    #         elif 'bias' in key:
+    #             init.zeros_(model_sd[key])
 
-            # Add the initialized tensor to the checkpoint
-            checkpoint[key] = model_sd[key]
+    #         # Add the initialized tensor to the checkpoint
+    #         checkpoint[key] = model_sd[key]
 
-        # Load the adjusted checkpoint
-        missing_keys, unexpected_keys = self.id_adapter.load_state_dict(checkpoint, strict=False)
-        print("Missing keys:", missing_keys)
-        print("Unexpected keys:", unexpected_keys)
+    #     # Load the adjusted checkpoint
+    #     missing_keys, unexpected_keys = self.id_adapter.load_state_dict(checkpoint, strict=False)
+    #     print("Missing keys:", missing_keys)
+    #     print("Unexpected keys:", unexpected_keys)
 
     def to_gray(self, img):
         x = 0.299 * img[:, 0:1] + 0.587 * img[:, 1:2] + 0.114 * img[:, 2:3]
