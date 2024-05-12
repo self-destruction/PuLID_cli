@@ -47,13 +47,13 @@ class PuLIDPipeline:
         print(0)
         # load base model
         unet = UNet2DConditionModel.from_config(sdxl_base_repo, subfolder='unet').to(self.device, torch.float16)
-        # unet.load_state_dict(
-        #     load_file(
-        #         hf_hub_download('ByteDance/SDXL-Lightning', 'sdxl_lightning_8step_unet.safetensors'), device=self.device
-        #         # hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
-        #         # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
-        #     )
-        # )
+        unet.load_state_dict(
+            load_file(
+                # hf_hub_download('ByteDance/SDXL-Lightning', 'sdxl_lightning_8step_unet.safetensors'), device=self.device
+                hf_hub_download(sdxl_lightning_repo, 'Juggernaut_RunDiffusionPhoto2_Lightning_4Steps.safetensors'), device=self.device
+                # hf_hub_download(sdxl_lightning_repo, 'Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors'), device=self.device
+            )
+        )
         unet.half()
         self.hack_unet_attn_layers(unet)
         print(1)
