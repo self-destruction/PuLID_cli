@@ -60,10 +60,10 @@ class PuLIDPipeline:
         #     sdxl_base_repo, torch_dtype=torch.float16
         # ).to(self.device)
         # self.pipe.watermark = None
-        vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
+        # vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
-            vae=vae,
+            # vae=vae,
             torch_dtype=torch.float16,
             custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
