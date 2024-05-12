@@ -51,6 +51,8 @@ class PuLIDPipeline:
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(
             self.pipe.scheduler.config, timestep_spacing="trailing", use_karras_sigmas=True
         )
+        self.pipe.enable_vae_tiling()
+        apply_hidiffusion(self.pipe)
 
         # ID adapters
         self.id_adapter = IDEncoder().to(self.device)
