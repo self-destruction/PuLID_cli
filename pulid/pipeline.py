@@ -17,6 +17,7 @@ from insightface.app import FaceAnalysis
 from safetensors.torch import load_file
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.functional import normalize, resize
+from hidiffusion import apply_hidiffusion, remove_hidiffusion
 
 from eva_clip import create_model_and_transforms
 from eva_clip.constants import OPENAI_DATASET_MEAN, OPENAI_DATASET_STD
