@@ -65,7 +65,7 @@ class PuLIDPipeline:
             sdxl_base_repo,
             # vae=vae,
             torch_dtype=torch.float16,
-            custom_pipeline="lpw_stable_diffusion_xl",
+            # custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
             add_watermarker=False,
             variant="fp16",
