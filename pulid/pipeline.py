@@ -216,7 +216,7 @@ class PuLIDPipeline:
             num_images_per_prompt=size[0],
             height=size[1],
             width=size[2],
-            eta=1.0,
+            # eta=1.0,
             num_inference_steps=steps,
             guidance_scale=guidance_scale,
             cross_attention_kwargs={'id_embedding': image_embedding, 'id_scale': id_scale},
