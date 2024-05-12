@@ -17,7 +17,7 @@ from insightface.app import FaceAnalysis
 from safetensors.torch import load_file
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.functional import normalize, resize
-# from hidiffusion import apply_hidiffusion, remove_hidiffusion
+from hidiffusion import apply_hidiffusion, remove_hidiffusion
 
 from eva_clip import create_model_and_transforms
 from eva_clip.constants import OPENAI_DATASET_MEAN, OPENAI_DATASET_STD
@@ -57,10 +57,10 @@ class PuLIDPipeline:
 
         self.hack_unet_attn_layers(self.pipe.unet)
 
-        # apply_hidiffusion(self.pipe)
-        # self.pipe.enable_vae_tiling()
-        # self.pipe.enable_model_cpu_offload()
-        # self.pipe.enable_xformers_memory_efficient_attention()
+        apply_hidiffusion(self.pipe)
+        self.pipe.enable_vae_tiling()
+        self.pipe.enable_model_cpu_offload()
+        self.pipe.enable_xformers_memory_efficient_attention()
 
         # preprocessors
         # face align and parsing
