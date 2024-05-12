@@ -51,6 +51,7 @@ class PuLIDPipeline:
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(
             self.pipe.scheduler.config, timestep_spacing="trailing", use_karras_sigmas=True
         )
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.pipe.enable_vae_tiling()
         apply_hidiffusion(self.pipe)
 
@@ -210,6 +211,7 @@ class PuLIDPipeline:
         images = self.pipe(
             prompt=prompt,
             negative_prompt=prompt_n,
+            eta=1.0,
             num_images_per_prompt=size[0],
             height=size[1],
             width=size[2],
