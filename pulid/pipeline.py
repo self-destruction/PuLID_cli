@@ -39,10 +39,10 @@ class PuLIDPipeline:
         sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
-        # vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
+        vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
-            # vae=vae,
+            vae=vae,
             torch_dtype=torch.float16,
             # custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
