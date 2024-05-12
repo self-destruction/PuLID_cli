@@ -69,10 +69,10 @@ class PuLIDPipeline:
             torch_dtype=torch.float16,
             # custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
-            # add_watermarker=False,
+            add_watermarker=False,
             variant="fp16",
         ).to(self.device)
-        self.pipe.watermark = None
+        # self.pipe.watermark = None
 
         print(2)
         # scheduler
