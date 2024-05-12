@@ -51,9 +51,11 @@ class PuLIDPipeline:
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(
             self.pipe.scheduler.config, timestep_spacing="trailing", use_karras_sigmas=True
         )
-        self.pipe.enable_xformers_memory_efficient_attention()
-        self.pipe.enable_vae_tiling()
+
         apply_hidiffusion(self.pipe)
+        self.pipe.enable_vae_tiling()
+        self.pipe.enable_model_cpu_offload()
+        self.pipe.enable_xformers_memory_efficient_attention()
 
         # ID adapters
         self.id_adapter = IDEncoder().to(self.device)
