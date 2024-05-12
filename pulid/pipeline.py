@@ -9,8 +9,6 @@ from basicsr.utils import img2tensor, tensor2img
 from diffusers import (
     DPMSolverMultistepScheduler,
     StableDiffusionXLPipeline,
-    UNet2DConditionModel,
-    AutoencoderKL,
 )
 from facexlib.parsing import init_parsing_model
 from facexlib.utils.face_restoration_helper import FaceRestoreHelper
@@ -39,10 +37,8 @@ class PuLIDPipeline:
         sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
         self.sdxl_base_repo = sdxl_base_repo
 
-        vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
-            vae=vae,
             torch_dtype=torch.float16,
             # custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
