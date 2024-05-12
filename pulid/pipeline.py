@@ -70,7 +70,7 @@ class PuLIDPipeline:
             # custom_pipeline="lpw_stable_diffusion_xl",
             use_safetensors=True,
             # add_watermarker=False,
-            variant="fp16",
+            # variant="fp16",
         ).to(self.device)
         self.pipe.watermark = None
 
