@@ -59,7 +59,7 @@ class PuLIDPipeline:
 
         apply_hidiffusion(self.pipe)
         # self.pipe.enable_vae_tiling()
-        # self.pipe.enable_model_cpu_offload()
+        self.pipe.enable_model_cpu_offload()
         # self.pipe.enable_xformers_memory_efficient_attention()
 
         # preprocessors
