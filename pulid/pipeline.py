@@ -86,7 +86,6 @@ class PuLIDPipeline:
         self.eva_transform_std = eva_transform_std
         # antelopev2
         snapshot_download('DIAMONIK7777/antelopev2', local_dir='models/antelopev2')
-        print(8)
         self.app = FaceAnalysis(
             name='antelopev2', root='.', providers=['CPUExecutionProvider']
         )
