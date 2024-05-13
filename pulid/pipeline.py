@@ -57,7 +57,7 @@ class PuLIDPipeline:
         self.hack_unet_attn_layers(self.pipe.unet)
 
         # apply_hidiffusion(self.pipe)
-        # self.pipe.enable_vae_tiling()
+        self.pipe.enable_vae_tiling()
         # self.pipe.enable_model_cpu_offload()
 
         # preprocessors
