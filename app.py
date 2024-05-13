@@ -98,7 +98,7 @@ def run(
         id_image = resize_numpy_image_long(id_image, 1024)
         id_embeddings = pipeline.get_id_embedding(id_image)
         for supp_id_image in supp_images:
-            supp_id_image = resize_numpy_image_long(Image.open(supp_id_image).convert("RGB"), 1024)
+            supp_id_image = resize_numpy_image_long(supp_id_image, 1024)
             supp_id_embeddings = pipeline.get_id_embedding(supp_id_image)
             id_embeddings = torch.cat(
                 (id_embeddings, supp_id_embeddings if id_mix else supp_id_embeddings[:, :5]), dim=1
