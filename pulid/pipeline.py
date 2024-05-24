@@ -35,13 +35,14 @@ class PuLIDPipeline:
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.device = 'cuda'
-        sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
+        # sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
+        sdxl_base_repo = 'imagepipeline/RealVisXL-V4.0'
         self.sdxl_base_repo = sdxl_base_repo
 
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
             torch_dtype=torch.float16,
-            use_safetensors=True,
+            # use_safetensors=True,
             add_watermarker=False,
             variant="fp16",
         ).to(self.device)
