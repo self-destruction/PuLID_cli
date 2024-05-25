@@ -43,9 +43,9 @@ class PuLIDPipeline:
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
             sdxl_base_repo,
             torch_dtype=torch.float16,
-            use_safetensors=True,
+            # use_safetensors=True,
             add_watermarker=False,
-            variant="fp16",
+            # variant="fp16",
         ).to(self.device)
 
         # scheduler
