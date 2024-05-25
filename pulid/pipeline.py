@@ -35,8 +35,9 @@ class PuLIDPipeline:
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.device = 'cuda'
-        sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
+        # sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
         # sdxl_base_repo = 'SG161222/RealVisXL_V4.0'
+        sdxl_base_repo = 'Magamanny/Pony-Diffusion-V6-XL'
         self.sdxl_base_repo = sdxl_base_repo
 
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
