@@ -37,7 +37,7 @@ class PuLIDPipeline:
         self.device = 'cuda'
         # sdxl_base_repo = 'RunDiffusion/Juggernaut-XL-v9'
         # sdxl_base_repo = 'SG161222/RealVisXL_V4.0'
-        sdxl_base_repo = 'fancyfeast/pony-diffusion-v6-xl-diffusers'
+        sdxl_base_repo = 'GraydientPlatformAPI/ponydiffusion-turbo-sdxl'
         self.sdxl_base_repo = sdxl_base_repo
 
         self.pipe = StableDiffusionXLPipeline.from_pretrained(
